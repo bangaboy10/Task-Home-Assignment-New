@@ -1,0 +1,27 @@
+start: entry exit
+
+entry: "ENTRY:" expr
+exit: "EXIT:" expr
+
+?expr: expr "AND" term   -> and_op
+     | expr "OR" term    -> or_op
+     | term
+
+?term: condition
+     | "(" expr ")"
+
+condition: operand COMP operand
+         | operand "CROSSES_ABOVE" operand
+
+COMP: ">" | "<" | ">=" | "<=" | "=="
+
+?operand: INDICATOR
+        | FIELD
+        | NUMBER
+
+FIELD: "open" | "high" | "low" | "close" | "volume"
+INDICATOR: "SMA(close," NUMBER ")" | "RSI(close," NUMBER ")"
+
+%import common.NUMBER
+%import common.WS
+%ignore WS
